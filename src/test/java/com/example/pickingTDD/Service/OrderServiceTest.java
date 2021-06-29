@@ -1,33 +1,50 @@
 package com.example.pickingTDD.Service;
 
 import com.example.pickingTDD.Entity.Order;
+import com.example.pickingTDD.Entity.OrderDetail;
+import com.example.pickingTDD.Entity.OrderStateEnum;
 import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.fail;
 
+@ExtendWith(MockitoExtension.class)
 @SpringBootTest
 public class  OrderServiceTest {
 
-    @Autowired
-    OrderService orderService;
+    @InjectMocks
+    OrderService orderService = new OrderServiceImpl( );
+
+//    @Autowired
+//    OrderService orderService;
+
+    @Mock
+    OrderDetailService orderDetailService;
 
     Order orderSuccess;
     Order orderFail;
 
     @BeforeEach
     public void orderInit() {
+        OrderDetail orderDetail = new OrderDetail();
         orderSuccess = new Order();
         orderSuccess.setOrderId(1L);
-        orderSuccess.setState("Ordered");
+        orderSuccess.setState(OrderStateEnum.ORDERED);
+        orderSuccess.setOrderDetailList(Arrays.asList(orderDetail));
 
         orderFail = new Order();
         orderFail.setOrderId(null);
-        orderFail.setState("");
+        orderFail.setState(null);
     }
 
     @Test
@@ -42,7 +59,7 @@ public class  OrderServiceTest {
 
 
         Assertions.assertEquals(1L, order.getOrderId());
-        Assertions.assertEquals("Ordered", order.getState());
+        Assertions.assertEquals(OrderStateEnum.ORDERED, order.getState());
     }
 
     @Test
@@ -65,4 +82,5 @@ public class  OrderServiceTest {
 
         Assertions.assertEquals("Order Validation Failed.", e.getMessage());
     }
+
 }

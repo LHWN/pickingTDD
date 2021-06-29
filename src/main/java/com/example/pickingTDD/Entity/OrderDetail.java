@@ -3,13 +3,12 @@ package com.example.pickingTDD.Entity;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
-public class Order {
+public class OrderDetail {
+    private Long orderDetailId;
     private Long orderId;
-    private OrderStateEnum state;
+    private Sku sku;
+    private int amount;
 
-    private List<OrderDetail> orderDetailList;
 }
